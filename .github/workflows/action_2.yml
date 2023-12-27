@@ -25,7 +25,7 @@ jobs:
       - name: execute py script # run get_rooms.py
         env:
           SOME_SECRET: ${{ secrets.SOME_SECRET }}
-        run: python main.py
+        run: python get_rooms.py
           
       - name: commit files
         run: |
