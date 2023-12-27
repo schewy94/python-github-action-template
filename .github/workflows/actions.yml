@@ -1,16 +1,16 @@
 name: run main.py
 
 on:
+  workflow_dispatch: # This event allows manual triggering
   schedule:
-    - cron: '0 */4 * * *' # At 00:00 on Monday
+    - cron: '0 */4 * * *' # At every 4th hour
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-
       - name: checkout repo content
-        uses: actions/checkout@v2 # checkout the repository content to github runner
+        uses: actions/checkout@v2 # checkout the repository content to GitHub runner
 
       - name: setup python
         uses: actions/setup-python@v4
