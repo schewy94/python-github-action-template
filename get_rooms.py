@@ -103,7 +103,7 @@ for i in ["Penang","Phucket","Wednesday","Friday"]:
             res += f'{item["date"]} : {get_room_inventory(item["time_slots"][0]["arrangement_id"])}\n'
 
 
-send_url = 'https://api.telegram.org/bot6453714074:AAEJFCtoIRzxkBtoKF1H2ExlGz-IvgaSUoc/sendmessage?chat_id=-4067239998&text="{}"'.format(res)
+send_url = 'https://api.telegram.org/bot6453714074:AAEJFCtoIRzxkBtoKF1H2ExlGz-IvgaSUoc/sendmessage?chat_id=-4067239998&text={}'.format(res)
 # print(send_url)
 requests.get(send_url)
 print("sent")
