@@ -1,7 +1,5 @@
-import os
 import telebot
 import requests
-import pandas as pd
 
 API_Key = "6453714074:AAEJFCtoIRzxkBtoKF1H2ExlGz-IvgaSUoc"
 bot = telebot.TeleBot(API_Key )
