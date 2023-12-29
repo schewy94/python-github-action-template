@@ -1,5 +1,8 @@
+import os
 import telebot
 import requests
+import pandas as pd
+import json
 
 API_Key = "6453714074:AAEJFCtoIRzxkBtoKF1H2ExlGz-IvgaSUoc"
 bot = telebot.TeleBot(API_Key )
@@ -31,6 +34,9 @@ def get_room_inventory(arrangement_id):
         # Initialize inventory values
         balcony_stateroom_inventory = 0
         balcony_deluxe_stateroom_inventory = 0
+        oceanview_stateroom_inventory = 0
+        interior_stateroom_inventory = 0
+
 
         # Find the inventory for "Balcony Stateroom" and "Balcony Deluxe Stateroom"
         for price in data["result"]["prices"]:
@@ -43,6 +49,14 @@ def get_room_inventory(arrangement_id):
                 inventory_id = str(price["inventory_id"])
                 if inventory_id in inventories:
                     balcony_deluxe_stateroom_inventory = inventories[inventory_id]
+            elif price["name"] == "Oceanview Stateroom":
+                inventory_id = str(price["inventory_id"])
+                if inventory_id in inventories:
+                    oceanview_stateroom_inventory = inventories[inventory_id]
+            elif price["name"] == "Interior Stateroom":
+                inventory_id = str(price["inventory_id"])
+                if inventory_id in inventories:
+                    interior_stateroom_inventory = inventories[inventory_id]
                 # print(inventories[inventory_id])
 
         # Create a dictionary with the inventory values
@@ -51,7 +65,8 @@ def get_room_inventory(arrangement_id):
         #     "Balcony Deluxe Stateroom": balcony_deluxe_stateroom_inventory
         # }
         # print(room_inventory)
-        return f'Bal : {balcony_stateroom_inventory} | Bal Del {balcony_deluxe_stateroom_inventory}'
+        return balcony_stateroom_inventory, balcony_deluxe_stateroom_inventory, oceanview_stateroom_inventory, interior_stateroom_inventory
+        # return f'Bal : {balcony_stateroom_inventory} | Bal Del {balcony_deluxe_stateroom_inventory}'
 
     else:
         print(f"Failed to retrieve data for Arrangement ID {arrangement_id}. Status code: {response.status_code}")
@@ -78,12 +93,12 @@ wednesday_dict={
 
 loc_dict = {
     "Penang" : penang_dict,
-    "Phucket": phucket_dict,
+    "Phuket": phucket_dict,
     "Wednesday": wednesday_dict,
     "Friday" : friday_dict
 }
 res = ""
-for i in ["Penang","Phucket","Wednesday","Friday"]:
+for i in ["Penang","Phuket", "Wednesday", "Friday"]:
     package_id = loc_dict[i][number_of_people]
 
     url = f'https://rwcruises.partner.flickket.com/v1/experiencesrv/packages/schedule_service/get_schedules_and_units?translation=false&package_id={package_id}&preview=0'
@@ -100,10 +115,13 @@ for i in ["Penang","Phucket","Wednesday","Friday"]:
         data = response.json()
         # print(data["result"]["schedules"])
         for item in data["result"]["schedules"]:
-            res += f'{item["date"]} : {get_room_inventory(item["time_slots"][0]["arrangement_id"])}\n'
+            bal_inv, bal_del_inv, ov_inv, int_inv = get_room_inventory(item["time_slots"][0]["arrangement_id"])
+            # if bal_inv > 0 or bal_del_inv > 0:
+            res += f'{item["date"]} : BDS-{bal_del_inv}, BSS-{bal_inv}, OSS-{ov_inv}, ISS-{int_inv} \n'
 
-
+# print(res)
 send_url = 'https://api.telegram.org/bot6453714074:AAEJFCtoIRzxkBtoKF1H2ExlGz-IvgaSUoc/sendmessage?chat_id=-4067239998&text={}'.format(res)
 # print(send_url)
 requests.get(send_url)
 print("sent")
+
