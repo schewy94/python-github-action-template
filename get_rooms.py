@@ -119,9 +119,9 @@ for i in ["Penang","Phuket", "Wednesday", "Friday"]:
             # if bal_inv > 0 or bal_del_inv > 0:
             res += f'{item["date"]} : BDS-{bal_del_inv}, BSS-{bal_inv}, OSS-{ov_inv}, ISS-{int_inv} \n'
 
-# print(res)
-send_url = 'https://api.telegram.org/bot6453714074:AAEJFCtoIRzxkBtoKF1H2ExlGz-IvgaSUoc/sendmessage?chat_id=-4067239998&text={}'.format(res)
-# print(send_url)
-requests.get(send_url)
-print("sent")
+    # print(res)
+    send_url = 'https://api.telegram.org/bot6453714074:AAEJFCtoIRzxkBtoKF1H2ExlGz-IvgaSUoc/sendmessage?chat_id=-4067239998&text={}'.format(res)
+    # print(send_url)
+    requests.get(send_url)
+    print("sent")
 
