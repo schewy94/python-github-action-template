@@ -108,7 +108,7 @@ for i in ["Penang","Phuket", "Wednesday", "Friday"]:
     }
 
     response = requests.get(url, headers=headers)
-    res += f'{i}\n'
+    res = f'{i}\n'
 
     # Check if the request was successful
     if response.status_code == 200:
