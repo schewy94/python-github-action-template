@@ -1,7 +1,4 @@
 import requests
-import time
-import http.client
-import urllib
 
 def check_balcony_stateroom_availability(id):
     # Define the API URL
@@ -28,7 +25,7 @@ def check_balcony_stateroom_availability(id):
                 name = price["name"]
                 # Check if the inventory is available
                 if inventory_id in inventory_data and inventory_data[inventory_id] > 0:
-                    message += f"Name: {name}, Inventory Available: {inventory_data[inventory_id]}"
+                    message += f"Name: {name}, Inventory Available: {inventory_data[inventory_id]}\n"
                 
         # Find the "Balcony Stateroom" object and get its inventory ID
         balcony_stateroom = next((room for room in data["result"]["prices"] if room["name"] == "Balcony Stateroom" or room["name"] == "Balcony Deluxe Stateroom"), None)
@@ -37,48 +34,17 @@ def check_balcony_stateroom_availability(id):
             
             # Check the inventory in the inventories object
             if inventory_id and data["result"]["inventories"].get(str(inventory_id)) > 1:
-                print("Balcony Stateroom is available with inventory greater than 1.")
-
-                # create connection
-                conn = http.client.HTTPSConnection("api.pushover.net:443")
-
-                # make POST request to send message
-                conn.request("POST", "/1/messages.json",
-                    urllib.parse.urlencode({
-                        "token": "ajjmkbe82szqibbs4z43kiyyu7rx2w",
-                        "user": "ugym3m8yxvomzaz4x63qnaq2tsthxs",
-                        "title": "Cruise",
-                        "message": "Balcony Available",
-                        "url": "",
-                        "priority": "0" 
-                    }), { "Content-type": "application/x-www-form-urlencoded" })
-
-                # get response
-                conn.getresponse()
-            else:
-                # create connection
-                conn = http.client.HTTPSConnection("api.pushover.net:443")
-
-                # make POST request to send message
-                conn.request("POST", "/1/messages.json",
-                    urllib.parse.urlencode({
-                        "token": "ajjmkbe82szqibbs4z43kiyyu7rx2w",
-                        "user": "ugym3m8yxvomzaz4x63qnaq2tsthxs",
-                        "title": "No room yet",
-                        "message": message,
-                        "url": "",
-                        "priority": "0" 
-                    }), { "Content-type": "application/x-www-form-urlencoded" })
-
-                # get response
-                conn.getresponse()
+                # print("Balcony Stateroom is available with inventory greater than 1.")
+                message += "Balcony available"
+                send_url = 'https://api.telegram.org/bot6453714074:AAEJFCtoIRzxkBtoKF1H2ExlGz-IvgaSUoc/sendmessage?chat_id=1607046133&text={}'.format(message)
+                requests.get(send_url)
                 print(message)
-                print("Balcony Stateroom is not available")
+                # print("Balcony Stateroom is not available")
         else:
             print("Balcony Stateroom not found in the response.")
 
 # Run the code every four hours
-arrangement_id = 1709424000319833 # 3/3
+arrangement_id = 1709424000319833# 3/3
 
 roomtype = "Balcony Stateroom"
 # arrangement_id = 1708041600319760 #16/2 Friday
