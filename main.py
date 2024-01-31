@@ -42,6 +42,10 @@ def check_balcony_stateroom_availability(id):
                 # print("Balcony Stateroom is not available")
         else:
             print("Balcony Stateroom not found in the response.")
+            message += "Balcony NOT available"
+            send_url = 'https://api.telegram.org/bot6453714074:AAEJFCtoIRzxkBtoKF1H2ExlGz-IvgaSUoc/sendmessage?chat_id=1607046133&text={}'.format(message)
+            requests.get(send_url)
+
 
 # Run the code every four hours
 arrangement_id = 1709424000319833# 3/3
